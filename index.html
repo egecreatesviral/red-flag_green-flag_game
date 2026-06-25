@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project OVERDRIVE 🧠</title>
+    <!-- Tailwind CSS ve Alpine.js Altyapısı -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +19,6 @@
             font-family: 'Fira Code', monospace;
         }
         
-        /* Arka Plandaki Yumuşatılmış Matrix Akışı */
         #matrix-canvas {
             position: absolute;
             top: 0;
@@ -26,11 +26,11 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.06; /* Apple tarzı soft arka plan için opaklığı düşürdük */
+            opacity: 0.05;
             pointer-events: none;
         }
 
-        /* 🍎 APPLE LIQUID GLASS (SIVI CAM) PRO efekti */
+        /* 🍎 APPLE LIQUID GLASS (SIVI CAM) PRO */
         .liquid-glass {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
             backdrop-filter: blur(40px);
@@ -40,10 +40,9 @@
                 0 4px 30px rgba(0, 0, 0, 0.4),
                 inset 0 1px 1px rgba(255, 255, 255, 0.1),
                 inset 0 10px 20px rgba(255, 255, 255, 0.05);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); /* Apple tarzı ultra akıcı geçiş */
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Butonlar İçin Sıvı Cam Efekti */
         .glass-btn {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(10px);
@@ -52,7 +51,17 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Apple Tarzı Yumuşak Reaksiyon Işıkları (Göz yormayan parlama) */
+        /* Dil Değiştirme Butonu Tasarımı */
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
         .glow-red {
             border-color: rgba(239, 68, 68, 0.3);
             box-shadow: 0 0 40px rgba(239, 68, 68, 0.1), inset 0 1px 1px rgba(239, 68, 68, 0.2);
@@ -65,31 +74,33 @@
 </head>
 <body class="relative min-h-screen flex flex-col items-center justify-center p-4 selection:bg-purple-500 selection:text-white" x-data="overdriveApp()" x-init="initMatrix()">
 
+    <!-- ARKA PLAN MATRİX MOTORU -->
     <canvas id="matrix-canvas"></canvas>
 
+    <!-- ARKA PLAN IŞIK HAREKETLERİ -->
     <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-    <div class="absolute top-6 right-6 z-20">
-        <button @click="toggleLang()" class="px-4 py-2 glass-btn rounded-full text-slate-400 hover:text-white text-xs font-semibold cursor-pointer tracking-wider code-font hover:border-white/20">
-            [ <span x-text="lang.toUpperCase()"></span> ]
-        </button>
-    </div>
-
+    <!-- MAIN CARD: LIQUID GLASS CONTAINER -->
     <div class="w-full max-w-xl liquid-glass rounded-[2rem] p-8 md:p-10 z-10 relative flex flex-col justify-center min-h-[460px]"
          :class="{'glow-red': glitchState === 'red', 'glow-green': glitchState === 'green'}">
         
+        <!-- 📟 AŞAMA 1: PREMIUM TERMINAL GİRİŞİ -->
         <div x-show="currentStage === 'boot'" class="code-font text-left space-y-4 text-xs md:text-sm text-purple-300/80">
             <div class="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
                 <div class="flex items-center gap-1.5">
                     <span class="w-2.5 h-2.5 rounded-full bg-white/10"></span>
                     <span class="text-[11px] text-slate-500 tracking-wider">OVERDRIVE_OS.SECURE</span>
                 </div>
+                <!-- Giriş Ekranındaki Net Dil Seçeneği -->
+                <button @click="toggleLang()" class="lang-btn px-3 py-1 rounded-full text-[11px] text-white font-medium cursor-pointer flex items-center gap-1">
+                    <span x-text="lang === 'tr' ? '🇹🇷 TR' : '🇬🇧 EN'"></span>
+                </button>
             </div>
             
             <div class="space-y-2 min-h-[140px]">
                 <template x-for="(log, idx) in bootLogs" :key="idx">
-                    <div class="flex items-center gap-2 animate-fade-in">
+                    <div class="flex items-center gap-2">
                         <span class="text-purple-500/50">•</span>
                         <span class="text-slate-300 font-medium" x-text="log"></span>
                     </div>
@@ -97,29 +108,39 @@
             </div>
 
             <div x-show="isBootingComplete" class="pt-6 text-center">
-                <button @click="enterCoreSystem()" class="px-8 py-3.5 bg-white text-black font-bold rounded-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-sm shadow-[0_10px_25px_rgba(255,255,255,0.15)] tracking-wide">
+                <button @click="enterCoreSystem()" class="w-full sm:w-auto px-8 py-3.5 bg-white text-black font-bold rounded-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer text-sm shadow-[0_10px_25px_rgba(255,255,255,0.15)] tracking-wide">
                     <span x-text="t('enterBtn')"></span>
                 </button>
             </div>
         </div>
 
+        <!-- 🎮 AŞAMA 2: CORE INTERACTIVE INTERFACE (MAIN HUD) -->
         <div x-show="currentStage === 'main_hud'" x-transition.opacity.duration.500ms class="flex flex-col justify-between h-full space-y-8">
             
+            <!-- Üst Bar ve Net Dil Butonu (Oyun Esnası) -->
             <div class="flex justify-between items-center text-[11px] tracking-widest text-slate-500 font-bold uppercase code-font border-b border-white/5 pb-4">
-                <div class="flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
-                    <span>STAGE <span class="text-white" x-text="currentQuestion + 1"></span> / <span x-text="questions.length"></span></span>
+                <div class="flex items-center gap-3">
+                    <button @click="toggleLang()" class="lang-btn px-2.5 py-1 rounded-full text-[10px] text-white font-medium cursor-pointer normal-case tracking-normal">
+                        <span x-text="lang === 'tr' ? '🇹🇷 TR' : '🇬🇧 EN'"></span>
+                    </button>
+                    <span class="hidden sm:inline text-white/20">|</span>
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
+                        <span>STAGE <span class="text-white" x-text="currentQuestion + 1"></span>/<span x-text="questions.length"></span></span>
+                    </span>
                 </div>
                 <div>
                     <span>TOXIC_RATIO: <span class="text-white" x-text="toxicScore + '%'"></span></span>
                 </div>
             </div>
 
+            <!-- Soru Paneli -->
             <div class="py-4 space-y-3">
                 <div class="text-[10px] font-extrabold text-purple-400 tracking-[0.2em] uppercase code-font">// NEURAL_INPUT</div>
                 <h2 class="text-xl md:text-2xl font-bold text-white tracking-tight leading-relaxed min-h-[90px]" x-text="questions[currentQuestion][lang]"></h2>
             </div>
 
+            <!-- Butonlar -->
             <div class="grid grid-cols-2 gap-4 pt-2">
                 <button @click="handleChoice('red')" class="glass-btn group px-6 py-5 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-2 hover:bg-red-500/10 hover:border-red-500/30">
                     <span class="text-2xl group-hover:scale-110 transition-transform duration-300">🚩</span>
@@ -133,6 +154,7 @@
             </div>
         </div>
 
+        <!-- 📊 AŞAMA 3: ANALİZ RAPORU (SKOR) -->
         <div x-show="currentStage === 'result'" x-transition.opacity.duration.500ms class="text-center space-y-8 py-4">
             <div class="inline-flex p-4 rounded-full bg-white/[0.02] border border-white/10 shadow-inner">
                 <span class="text-3xl">🧠</span>
@@ -140,24 +162,30 @@
             
             <div class="space-y-2">
                 <h2 class="text-sm font-extrabold tracking-[0.25em] text-slate-400 uppercase code-font" x-text="t('resultTitle')"></h2>
-                
                 <div class="text-6xl font-black tracking-tighter text-white py-4" x-text="toxicScore + '%'"></div>
                 <div class="text-[11px] uppercase tracking-widest text-purple-400 font-bold code-font" x-text="t('verdict')"></div>
             </div>
 
             <p class="text-sm text-slate-300 max-w-sm mx-auto leading-relaxed font-medium bg-white/[0.01] border border-white/5 rounded-2xl p-4 shadow-sm" x-text="getResultComment()"></p>
 
-            <button @click="restartGame()" class="px-6 py-2.5 glass-btn rounded-full text-xs font-bold text-slate-400 hover:text-white cursor-pointer code-font hover:border-white/20">
-                // SYSTEM_REBOOT()
-            </button>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <button @click="restartGame()" class="px-6 py-2.5 glass-btn rounded-full text-xs font-bold text-slate-400 hover:text-white cursor-pointer code-font hover:border-white/20">
+                    // SYSTEM_REBOOT()
+                </button>
+                <button @click="toggleLang()" class="lang-btn px-4 py-2 rounded-full text-xs font-semibold text-white cursor-pointer">
+                    <span x-text="lang === 'tr' ? 'Switch to 🇬🇧 EN' : '🇹🇷 TR\'ye Geç'"></span>
+                </button>
+            </div>
         </div>
 
     </div>
 
+    <!-- MINIMALIST TRAFFIC BADGE -->
     <div class="mt-8 z-10 opacity-30 hover:opacity-80 transition-opacity duration-500 scale-90 filter grayscale hover:grayscale-0">
         <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fproject_overdrive&count_bg=%231e293b&title_bg=%23090d16&title=SYS_VAL_TRAFFIC&edge_flat=false" alt="Visitor Counter"/>
     </div>
 
+    <!-- SİSTEM MOTORU -->
     <script>
         function overdriveApp() {
             return {
@@ -228,7 +256,7 @@
                                 this.isBootingComplete = true;
                             }
                         }, delay);
-                        delay += 250;
+                        delay += 200;
                     });
                 },
 
