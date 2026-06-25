@@ -30,7 +30,7 @@
             pointer-events: none;
         }
 
-        /* 🍎 APPLE LIQUID GLASS (SIVI CAM) PRO */
+        /* 🍎 APPLE LIQUID GLASS */
         .liquid-glass {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
             backdrop-filter: blur(40px);
@@ -51,7 +51,6 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Dil Değiştirme Butonu Tasarımı */
         .lang-btn {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -74,25 +73,22 @@
 </head>
 <body class="relative min-h-screen flex flex-col items-center justify-center p-4 selection:bg-purple-500 selection:text-white" x-data="overdriveApp()" x-init="initMatrix()">
 
-    <!-- ARKA PLAN MATRİX MOTORU -->
     <canvas id="matrix-canvas"></canvas>
 
-    <!-- ARKA PLAN IŞIK HAREKETLERİ -->
     <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-    <!-- MAIN CARD: LIQUID GLASS CONTAINER -->
-    <div class="w-full max-w-xl liquid-glass rounded-[2rem] p-8 md:p-10 z-10 relative flex flex-col justify-center min-h-[460px]"
+    <!-- MAIN CARD -->
+    <div class="w-full max-w-xl liquid-glass rounded-[2rem] p-8 md:p-10 z-10 relative flex flex-col justify-center min-h-[480px]"
          :class="{'glow-red': glitchState === 'red', 'glow-green': glitchState === 'green'}">
         
-        <!-- 📟 AŞAMA 1: PREMIUM TERMINAL GİRİŞİ -->
+        <!-- 📟 AŞAMA 1: START SCREEN -->
         <div x-show="currentStage === 'boot'" class="code-font text-left space-y-4 text-xs md:text-sm text-purple-300/80">
             <div class="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
                 <div class="flex items-center gap-1.5">
                     <span class="w-2.5 h-2.5 rounded-full bg-white/10"></span>
                     <span class="text-[11px] text-slate-500 tracking-wider">OVERDRIVE_OS.SECURE</span>
                 </div>
-                <!-- Giriş Ekranındaki Net Dil Seçeneği -->
                 <button @click="toggleLang()" class="lang-btn px-3 py-1 rounded-full text-[11px] text-white font-medium cursor-pointer flex items-center gap-1">
                     <span x-text="lang === 'tr' ? '🇹🇷 TR' : '🇬🇧 EN'"></span>
                 </button>
@@ -114,10 +110,9 @@
             </div>
         </div>
 
-        <!-- 🎮 AŞAMA 2: CORE INTERACTIVE INTERFACE (MAIN HUD) -->
+        <!-- 🎮 AŞAMA 2: INTERACTIVE INTERFACE (MAIN HUD) -->
         <div x-show="currentStage === 'main_hud'" x-transition.opacity.duration.500ms class="flex flex-col justify-between h-full space-y-8">
             
-            <!-- Üst Bar ve Net Dil Butonu (Oyun Esnası) -->
             <div class="flex justify-between items-center text-[11px] tracking-widest text-slate-500 font-bold uppercase code-font border-b border-white/5 pb-4">
                 <div class="flex items-center gap-3">
                     <button @click="toggleLang()" class="lang-btn px-2.5 py-1 rounded-full text-[10px] text-white font-medium cursor-pointer normal-case tracking-normal">
@@ -134,13 +129,11 @@
                 </div>
             </div>
 
-            <!-- Soru Paneli -->
             <div class="py-4 space-y-3">
                 <div class="text-[10px] font-extrabold text-purple-400 tracking-[0.2em] uppercase code-font">// NEURAL_INPUT</div>
-                <h2 class="text-xl md:text-2xl font-bold text-white tracking-tight leading-relaxed min-h-[90px]" x-text="questions[currentQuestion][lang]"></h2>
+                <h2 class="text-lg md:text-xl font-bold text-white tracking-tight leading-relaxed min-h-[100px]" x-text="questions[currentQuestion][lang]"></h2>
             </div>
 
-            <!-- Butonlar -->
             <div class="grid grid-cols-2 gap-4 pt-2">
                 <button @click="handleChoice('red')" class="glass-btn group px-6 py-5 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-2 hover:bg-red-500/10 hover:border-red-500/30">
                     <span class="text-2xl group-hover:scale-110 transition-transform duration-300">🚩</span>
@@ -154,7 +147,7 @@
             </div>
         </div>
 
-        <!-- 📊 AŞAMA 3: ANALİZ RAPORU (SKOR) -->
+        <!-- 📊 AŞAMA 3: RESULT REPORT -->
         <div x-show="currentStage === 'result'" x-transition.opacity.duration.500ms class="text-center space-y-8 py-4">
             <div class="inline-flex p-4 rounded-full bg-white/[0.02] border border-white/10 shadow-inner">
                 <span class="text-3xl">🧠</span>
@@ -180,12 +173,11 @@
 
     </div>
 
-    <!-- MINIMALIST TRAFFIC BADGE -->
+    <!-- VISITORS BADGE -->
     <div class="mt-8 z-10 opacity-30 hover:opacity-80 transition-opacity duration-500 scale-90 filter grayscale hover:grayscale-0">
         <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fproject_overdrive&count_bg=%231e293b&title_bg=%23090d16&title=SYS_VAL_TRAFFIC&edge_flat=false" alt="Visitor Counter"/>
     </div>
 
-    <!-- SİSTEM MOTORU -->
     <script>
         function overdriveApp() {
             return {
@@ -202,40 +194,61 @@
                         enterBtn: "SİSTEME GİRİŞ YAP",
                         resultTitle: "Nöronal Karar Matrisi",
                         verdict: "Net Toksiklik Hesaplaması",
-                        resultPerfect: "Mantık ve empati dengesi kusursuz. Tamamen güvenli, üst düzey entelektüel profil.",
-                        resultMid: "Kabul edilebilir insani anomaliler bulundu. Standart sapmalar dahilinde, stabil kitle.",
-                        resultToxic: "Yüksek risk faktörü. Davranışsal veri tabanı kırmızı alarm veriyor, izole edilmesi önerilir."
+                        resultPerfect: "🤖 Kusursuz Mantık! İlişki algoritmalarında hata payı sıfır, gerçek bir Green Flag lideri.",
+                        resultMid: "⚡ Standart İnsani Hatalar. Kabul edilebilir bug'lar bulundu fakat genel sistem stabil.",
+                        resultToxic: "💀 KRİTİK ALARM! Toksiklik seviyesi sınırı aştı. Acilen karantinaya alınması önerilir."
                     },
                     en: {
                         enterBtn: "ACCESS SYSTEM CORE",
                         resultTitle: "Neural Decision Matrix",
                         verdict: "Net Toxicity Calculation",
-                        resultPerfect: "Flawless balance of logic and empathy. Fully secure, premium intellectual profile.",
-                        resultMid: "Acceptable human anomalies detected. Within standard deviations, stable profile.",
-                        resultToxic: "High risk factor. Behavioral database triggers red alert, isolation recommended."
+                        resultPerfect: "🤖 Flawless Logic! Zero margin of error in relationship algorithms, a true Green Flag leader.",
+                        resultMid: "⚡ Standard Human Bugs. Acceptable glitches detected, but the overall system is stable.",
+                        resultToxic: "💀 CRITICAL WARNING! Toxicity levels breached safety limits. Immediate quarantine recommended."
                     }
                 },
 
+                // 🌟 YENİ UZATILMIŞ VE EĞLENCELİ 10 SORU
                 questions: [
                     {
-                        tr: "Bütün gün bilgisayar başında kod yazıp mesajlara 5 saat sonra dönüyor?",
-                        en: "Spends all day coding on the computer and replies to messages 5 hours later?"
+                        tr: "Bütün gün bilgisayar başında kod yazıp ya da oyun oynayıp, mesajlara 5 saat sonra 'pardon görmemişim' diye dönüyor?",
+                        en: "Spends all day coding or gaming, then replies to messages 5 hours later saying 'sorry didn't see it'?"
                     },
                     {
-                        tr: "Sırf 'estetik duruyor' diye bütün odasını siberpunk mor ışıkla doldurmuş?",
-                        en: "Filled their entire room with cyberpunk purple lights just because 'it looks aesthetic'?"
+                        tr: "Sırf 'estetik ve siberpunk duruyor' diye bütün odasını uyuyamayacak derecede mor neon ışıkla doldurmuş?",
+                        en: "Filled their entire bedroom with blinding purple neon lights just because 'it looks aesthetic and cyberpunk'?"
                     },
                     {
-                        tr: "Instagram'da 2000 kişiyi takip ediyor ama seni yakın arkadaşlarına eklemiyor?",
-                        en: "Follows 2000 people on Instagram but doesn't add you to their Close Friends?"
+                        tr: "Instagram'da 2500 kişiyi takip ediyor, hikayelerine herkesi ekliyor ama seni bir türlü yakın arkadaşlarına (Close Friends) eklemiyor?",
+                        en: "Follows 2500 people on Instagram, adds everyone to stories, but still hasn't added you to Close Friends?"
                     },
                     {
-                        tr: "Hesap geldiğinde aniden telefon görüşmesi varmış gibi masadan kalkıyor?",
-                        en: "When the bill arrives, suddenly gets up from the table pretending to have a call?"
+                        tr: "Garson hesap pusulasını masaya bıraktığı an aniden çok acil bir telefon araması gelmiş gibi masadan kalkıyor?",
+                        en: "The moment the waiter drops the bill on the table, they suddenly rush out pretending to have an emergency call?"
                     },
                     {
-                        tr: "Sürekli yapay zekanın dünyayı ele geçireceğini söyleyip duruyor?",
-                        en: "Constantly talks about how AI is going to take over the world?"
+                        tr: "Yemek yerken veya buluşmuşken sürekli yapay zekanın dünyayı ele geçireceğini ve insanlığın biteceğini anlatıp duruyor?",
+                        en: "During dates, constantly rants about how AI is going to take over the world and eradicate humanity?"
+                    },
+                    {
+                        tr: "Eski sevgilisinden bahsederken 'Aslında iyi biriydi ama psikolojik sorunları beni yordu' diyerek kendini sütten çıkmış ak kaşık yapıyor?",
+                        en: "When talking about their ex, says 'They were nice but their mental issues drained me' to act completely innocent?"
+                    },
+                    {
+                        tr: "Tartışırken haksız olduğunu anladığı an konuyu değiştirip 'Sen zaten geçen sene de bana böyle yapmıştın' diye eski defterleri açıyor?",
+                        en: "The moment they realize they are wrong in an argument, they bring up old stuff like 'Well, you did this to me last year'?"
+                    },
+                    {
+                        tr: "Sosyal medyada paylaştığı her fotoğrafın altına mutlaka felsefi, ağır veya İngilizce siber siber cümleler yazıyor?",
+                        en: "Writes heavy philosophical, deep, or cryptic English quotes under every single picture they post?"
+                    },
+                    {
+                        tr: "Birlikte bir plan yapacakken asla sorumluluk almayıp her şeye 'Fark etmez, sen seç, bana uyar' diyerek hayalet gibi takılıyor?",
+                        en: "Never takes responsibility when planning a date, acting like a ghost with 'I don't care, you choose, fine by me'?"
+                    },
+                    {
+                        tr: "Gecenin üçünde aniden 'Uydun mu?' (Uyanık mısın?) diye mesaj atıp, cevap verince ertesi gün öğlene kadar bir daha yazmıyor?",
+                        en: "Texts 'U up?' at 3 AM, and after you reply, doesn't text back until noon the next day?"
                     }
                 ],
 
@@ -276,8 +289,9 @@
                     this.glitchState = type;
                     setTimeout(() => this.glitchState = null, 400);
 
+                    // 10 soru olduğu için her red flag skoru %10 artırır
                     if (type === 'red') {
-                        this.toxicScore += Math.floor(100 / this.questions.length);
+                        this.toxicScore += 10;
                     }
 
                     if (this.currentQuestion < this.questions.length - 1) {
